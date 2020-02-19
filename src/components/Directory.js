@@ -4,48 +4,42 @@ import ContactsCard from "./ContactCard";
 import AddContact from "./AddContact";
 
 class Directory extends Component {
-  constructor() {
-    super();
-    this.state = {
-      contacts: [],
+  state = {
+    contacts: [],
+    newContactData: {
+      name: "",
+      phone: "",
+      email: "",
+      website:""
+    }
+  };
+
+  addHandler = () => {
+    const url = "https://jsonplaceholder.typicode.com/users";
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          contacts: data
+        });
+      });
+  };
+
+  newHandler = e => {
+    e.preventDefault();
+    let newContact = this.state.newContactData;
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newContact],
       newContactData: {
         name: "",
-        phone: "",
-        email: ""
-      }
-    };
-
-    this.handleNombre = this.handleNombre.bind(this);
-    this.handlecorreo = this.handlecorreo.bind(this);
-    this.handletelefono = this.handletelefono.bind(this);
-    this.newHandler = this.newHandler.bind(this);
-    this.addHandler = this.addHandler.bind(this);
-    this.handleClearForm = this.handleClearForm.bind(this);
-    console.log(this.state.contacts);
-    
-  }
-
-  addHandler(){
-    this.setState({
-      contacts: contactsData
-    })
-  }
-
-  newHandler ( e)  {
-    e.preventDefault(); 
-    let newContact = this.state.newContactData;
-    this.setState( prevState => ({
-      contacts: [...prevState.contacts, newContact],
-      newContactData : {
-        name: "",
         email: "",
-        phone: ""
+        phone: "",
+        website:""
       }
-
     }));
   };
 
-  handleNombre(e) {
+  handleNombre = e => {
     let value = e.target.value;
 
     this.setState(prevState => ({
@@ -54,9 +48,9 @@ class Directory extends Component {
         name: value
       }
     }));
-  }
+  };
 
-  handlecorreo(e) {
+  handlecorreo = e => {
     let value = e.target.value;
     this.setState(prevState => ({
       newContactData: {
@@ -64,9 +58,9 @@ class Directory extends Component {
         email: value
       }
     }));
-  }
+  };
 
-  handletelefono(e) {
+  handletelefono = e => {
     let value = e.target.value;
     this.setState(prevState => ({
       newContactData: {
@@ -74,18 +68,31 @@ class Directory extends Component {
         phone: value
       }
     }));
-  }
+  };
 
-  handleClearForm(e) {
+  handleInput = e => {
+    let value = e.target.value;
+    let name = e.target.name;
+    this.setState(prevState => ({
+      newContactData: {
+        ...prevState.newContactData,
+        [name]: value
+      }
+    }));
+  };
+
+
+  handleClearForm = e => {
     e.preventDefault();
     this.setState({
       newContactData: {
         name: "",
         email: "",
-        phone: ""
+        phone: "",
+        website : ""
       }
     });
-  }
+  };
 
   render() {
     const cards = this.state.contacts.map((contact, idx) => (
@@ -110,36 +117,49 @@ class Directory extends Component {
               <input
                 type="text"
                 className="form-control mt-3"
-                name=""
+                name="name"
                 id=""
                 aria-describedby="helpId"
                 placeholder="Nombre"
                 value={this.state.newContactData.name}
-                onChange={this.handleNombre}
+                onChange={this.handleInput}
               />
               <input
                 type="text"
                 className="form-control mt-3"
-                name=""
+                name="email"
                 id=""
                 aria-describedby="helpId"
                 placeholder="Correo"
                 value={this.state.newContactData.email}
-                onChange={this.handlecorreo}
+                onChange={this.handleInput}
               />
               <input
                 type="text"
                 className="form-control mt-3"
-                name=""
+                name="phone"
                 id=""
                 aria-describedby="helpId"
                 placeholder="Telefono"
                 value={this.state.newContactData.phone}
-                onChange={this.handletelefono}
+                onChange={this.handleInput}
+              />
+              <input
+                type="text"
+                className="form-control mt-3"
+                name="website"
+                id=""
+                aria-describedby="helpId"
+                placeholder="Website"
+                value={this.state.newContactData.website}
+                onChange={this.handleInput}
               />
             </div>
             <AddContact metodo={this.newHandler} name="Nuevo contacto" />
-            <AddContact metodo={this.handleClearForm} name="Limpiar formulario" />
+            <AddContact
+              metodo={this.handleClearForm}
+              name="Limpiar formulario"
+            />
           </form>
         </div>
       </div>

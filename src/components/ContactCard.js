@@ -8,6 +8,7 @@ function ContactCard(props) {
         <h2 className="card-title">{props.info.name}</h2>
         <p className="card-text">Telefono: {props.info.phone}</p>
         <p className="card-text">Email: {props.info.email}</p>
+        <p className="card-text">Website: {props.info.website}</p>
       </div>
     </div>
   );
